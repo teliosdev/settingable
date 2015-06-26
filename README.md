@@ -2,7 +2,7 @@
 
 * [Homepage](https://rubygems.org/gems/settingable)
 * [Documentation](http://rubydoc.info/gems/settingable/frames)
-* [Email](mailto:redjazz96 at gmail.com)
+* [Email](mailto:redjazz96@gmail.com)
 
 ## Description
 

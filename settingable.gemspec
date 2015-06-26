@@ -1,25 +1,24 @@
 # -*- encoding: utf-8 -*-
 
-require File.expand_path('../lib/settingable/version', __FILE__)
+require File.expand_path("../lib/settingable/version", __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = "settingable"
   gem.version       = Settingable::VERSION
-  gem.summary       = %q{TODO: Summary}
-  gem.description   = %q{TODO: Description}
+  gem.summary       = "Handles configuring your gems."
+  gem.description   = "Handles configuring your gems."
   gem.license       = "MIT"
   gem.authors       = ["Jeremy Rodi"]
   gem.email         = "redjazz96@gmail.com"
-  gem.homepage      = "https://rubygems.org/gems/settingable"
+  gem.homepage      = "https://github.com/medcat/settingable"
 
-  gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.files         = `git ls-files`.split($RS)
+  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+  gem.require_paths = ["lib"]
 
-  gem.add_development_dependency 'bundler', '~> 1.0'
-  gem.add_development_dependency 'rake', '~> 0.8'
-  gem.add_development_dependency 'rspec', '~> 2.4'
-  gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
-  gem.add_development_dependency 'yard', '~> 0.8'
+  gem.add_development_dependency "bundler"
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "yard"
 end

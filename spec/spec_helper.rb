@@ -1,4 +1,4 @@
-require 'rspec'
-require 'settingable/version'
+require "rspec"
+require "settingable"
 
 include Settingable
