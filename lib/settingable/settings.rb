@@ -9,15 +9,15 @@ module Settingable
     module ClassMethods
       extend Forwardable
 
-      def_delegators :settings, :[], :[]=, :fetch,
+      def_delegators :instance, :[], :[]=, :fetch,
                      :method_missing
-      def_delegator :settings, :build, :configure
+      def_delegator :instance, :build, :configure
 
       # Returns an instance of the included module.  Repeated calls
       # return the same instance.
       #
       # @return [Settings]
-      def settings
+      def instance
         @_settings ||= new
       end
 
@@ -46,14 +46,14 @@ module Settingable
     end
 
     extend Forwardable
-    def_delegators :@settings, :fetch
+    def_delegators :@settings, :fetch, :[], :[]=, :key?
 
     # Initialize the settings.  Merges the given settings to the default
     # settings.
     #
     # @param settings [Hash] The initial settings.
     def initialize(settings = {})
-      @settings = DeepMerge.deep_merge(self.class.default_settings, settings)
+      @settings = Settingable::Hash.new(merged_settings(settings))
     end
 
     # Builds the settings construct.  It yields itself, and then returns
@@ -66,23 +66,6 @@ module Settingable
       self
     end
 
-    # Sets a key to a value.
-    #
-    # @param key [Symbol, String] The key.
-    # @param value [Object] The value.
-    # @return [void]
-    def []=(key, value)
-      @settings[key.to_s.to_sym] = value
-    end
-
-    # Retrieves a key.  If it doesn't exist, it errors.
-    #
-    # @param key [Symbol, String] The key.
-    # @return [Object]
-    def [](key)
-      @settings.fetch(key.to_s.to_sym)
-    end
-
     # Method missing.  For set methods, it maps to the `:[]=` method; for
     # regular methods (i.e. not bang or ? methods), it maps to the `:[]`
     # method.
@@ -93,9 +76,35 @@ module Settingable
       map_method(method, args)
     end
 
+    # A hook method for ruby.  This should not be called directly.  It
+    # lets ruby know that we respond to certain methods.
+    #
+    # @param method [Symbol] The method to check.
+    # @return [Boolean]
+    def responds_to_missing?(method, _include_all = false)
+      !(method =~ /(\?|\!)\z/)
+    end
+
     private
 
-    # Maps the methods.
+    # Merges the given settings with the class defaults.  Performs a
+    # deep merge.
+    #
+    # @param provided [Hash]
+    # @return [Hash]
+    def merged_settings(provided)
+      DeepMerge.deep_merge(self.class.default_settings, provided)
+    end
+
+    # Maps the methods.  If the method is a setter, i.e. ends in `=`,
+    # it sets the value.  If arguments are provided to a non-setter
+    # method, it raises a NameError.
+    #
+    # @param method [Symbol]
+    # @param args [Array<Object>]
+    # @return [Object]
+    # @raise NameError If more than 1 argument is provided to a
+    #   setter, or arguments are provided to a non-setter method.
     def map_method(method, args)
       if method =~ /\A(.*)\=\z/ && args.length == 1
         self[$+] = args[0]

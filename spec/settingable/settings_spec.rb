@@ -11,7 +11,7 @@ class Configuration
 end
 
 RSpec.describe Settingable::Settings do
-  subject { Configuration.settings }
+  subject { Configuration.instance }
   before(:each) { Configuration.reset! }
 
   it "extends the base" do
@@ -20,10 +20,10 @@ RSpec.describe Settingable::Settings do
       .to include(Settingable::Settings::ClassMethods)
   end
 
-  describe ".settings" do
+  describe ".instance" do
     it "returns the same instance" do
-      expect(Configuration.settings).to be_a(Configuration)
-      expect(Configuration.settings).to be(Configuration.settings)
+      expect(Configuration.instance).to be_a(Configuration)
+      expect(Configuration.instance).to be(Configuration.instance)
     end
   end
 
