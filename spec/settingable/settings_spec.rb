@@ -1,4 +1,4 @@
-require "spec_helper"
+# encoding: utf-8
 
 # Test module for Setting.
 class Configuration
@@ -59,6 +59,17 @@ RSpec.describe Settingable::Settings do
     it "doesn't modify defaults" do
       subject[:hello] = "you"
       expect(defaults[:hello]).to eq "world"
+    end
+
+    context "with recursive settings" do
+      let(:defaults) { { hello: { foo: "bar", world: "baz" } }.freeze }
+      let(:settings) { { hello: { world: "hello" }, foo: "bar" }.freeze }
+
+      it "merges the settings" do
+        expect(subject[:hello][:world]).to eq "hello"
+        expect(defaults[:hello][:world]).to eq "baz"
+        expect(subject[:foo]).to eq "bar"
+      end
     end
   end
 

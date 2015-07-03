@@ -1,5 +1,8 @@
-Style/ClassAndModuleChildren:
-  Enabled: false
-
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+Style/Encoding:
+  Enabled: true
+Style/RegexpLiteral:
+  EnforcedStyle: mixed
+Metrics/MethodLength:
+  Max: 15

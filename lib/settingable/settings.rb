@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require "forwardable"
 
 module Settingable
@@ -51,7 +53,7 @@ module Settingable
     #
     # @param settings [Hash] The initial settings.
     def initialize(settings = {})
-      @settings = self.class.default_settings.merge(settings)
+      @settings = DeepMerge.deep_merge(self.class.default_settings, settings)
     end
 
     # Builds the settings construct.  It yields itself, and then returns
