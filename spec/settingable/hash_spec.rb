@@ -21,6 +21,16 @@ RSpec.describe Settingable::Hash do
     end
   end
 
+  describe "#to_h" do
+    it "gives a regular hash" do
+      expect(subject.to_h).to be_a ::Hash
+    end
+
+    it "has regular hash values" do
+      expect(subject.to_h[:foo]).to be_a ::Hash
+    end
+  end
+
   describe "#[]=" do
     it "converts hash values" do
       subject[:hello] = { foo: { bar: "baz" } }

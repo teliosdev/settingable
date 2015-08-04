@@ -89,6 +89,20 @@ module Settingable
       end
     end
 
+    # Converts this hash into a normal hash.  Since we recursively
+    # converted every hash value into a {Settingable::Hash}, we have
+    # to undo that for the new hash.
+    #
+    # @return [::Hash]
+    def to_h
+      out = {}
+      each do |key, value|
+        out[key] = convert(value, true)
+      end
+
+      out
+    end
+
     private
 
     # Converts the value to a {Settingable::Hash}, if it is a regular
@@ -96,9 +110,9 @@ module Settingable
     #
     # @param value [Hash, Object]
     # @return [Settingable::Hash, Object]
-    def convert(value)
+    def convert(value, invert = false)
       if value.is_a?(::Hash)
-        Settingable::Hash.new(value)
+        invert ? value.to_h : Settingable::Hash.new(value)
       else
         value
       end
