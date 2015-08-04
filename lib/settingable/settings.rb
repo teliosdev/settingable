@@ -46,7 +46,11 @@ module Settingable
     end
 
     extend Forwardable
-    def_delegators :@settings, :fetch, :[], :[]=, :key?
+    include Enumerable
+    include Comparable
+
+    def_delegators :@settings, :fetch, :[], :[]=, :key?, :each, :<=>,
+                   :keys, :values, :each_key, :each_value, :empty?
 
     # Initialize the settings.  Merges the given settings to the default
     # settings.
